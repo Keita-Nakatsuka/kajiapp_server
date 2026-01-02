@@ -1,12 +1,25 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
 from database import Base
 
-
-class User(Base):
-    __tablename__ = "users"
-
+class MstUser(Base):
+    __tablename__ = "mst_users"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), index=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    user = Column(String(100), nullable=True)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
+class MstKaji(Base):
+    __tablename__ = "mst_kaji"
+    id = Column(Integer, primary_key=True, index=True)
+    kaji = Column(String(100), nullable=True)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
+class TblKaji(Base):
+    __tablename__ = "tbl_kaji"
+    id = Column(Integer, primary_key=True, index=True)
+    kaji_id = Column(Integer, ForeignKey("mst_kaji.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("mst_users.id"), nullable=False)
+    done_date = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
