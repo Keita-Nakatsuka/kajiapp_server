@@ -3,6 +3,10 @@ FastAPIとSQLAlchemyを使ったデータベース接続のプログラムです
 これはFlutterの家事アプリで使われるサーバープログラムです。
 主に記録とマスターデータをDBから読み書きする処理です。
 
+## API仕様
+python main.pyを起動後swaggerUIを参照
+http://localhost:8000/docs#/
+
 ## ファイル構成
 - `main.py` - FastAPIアプリケーションのメインファイル
 - `database.py` - データベース接続設定

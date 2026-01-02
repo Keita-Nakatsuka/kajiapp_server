@@ -1,19 +1,17 @@
 from fastapi import FastAPI
 from database import engine, Base
 import models
-import routes_users
+import routes_kaji
 
-# テーブルを作成
-Base.metadata.create_all(bind=engine)
-
+#このmainが常時起動してWebサーバー的な役割を果たす
 app = FastAPI(
-    title="User Management API",
-    description="FastAPIとSQLAlchemyを使ったサンプルAPI",
+    title="Kaji Management API",
+    description="FastAPI と SQLAlchemy を使った家事管理API",
     version="1.0.0"
 )
 
 # ルーターを登録
-app.include_router(routes_users.router)
+app.include_router(routes_kaji.router)
 
 
 @app.get("/", tags=["root"])
