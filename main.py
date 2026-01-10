@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 import models
 import routes_kaji
@@ -8,6 +9,15 @@ app = FastAPI(
     title="Kaji Management API",
     description="FastAPI と SQLAlchemy を使った家事管理API",
     version="1.0.0"
+)
+
+# CORS設定
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # または特定のドメイン: ["https://yourdomain.com"]
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 # ルーターを登録
