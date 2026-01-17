@@ -23,10 +23,14 @@ try:
     # mst_kaji にシード値を挿入
     if db.query(models.MstKaji).count() == 0:
         kajis = [
+            models.MstKaji(kaji="朝ごはん"),
+            models.MstKaji(kaji="昼ごはん"),
+            models.MstKaji(kaji="晩ごはん"),
             models.MstKaji(kaji="洗濯"),
-            models.MstKaji(kaji="食器洗い"),
+            models.MstKaji(kaji="洗濯干し"),
             models.MstKaji(kaji="掃除"),
-            models.MstKaji(kaji="買い物"),
+            models.MstKaji(kaji="ゴミ捨て"),
+            models.MstKaji(kaji="散歩"),
         ]
         db.add_all(kajis)
         db.commit()
