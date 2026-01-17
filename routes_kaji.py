@@ -29,23 +29,29 @@ def get_kaji(kaji_id: int, db: Session = Depends(get_db)):
     return kaji
 
 #POST処理
-@router.post("/", response_model=schemas.TblKaji)
-def create_kaji(kaji: schemas.TblKajiCreate, db: Session = Depends(get_db)):
-    """新規家事記録を作成"""
-    # user_id と kaji_id が存在するかチェック
+@router.post("/", response_model=list[schemas.TblKaji])
+def create_kaji(kaji: schemas.TblKajiCreateMultiple, db: Session = Depends(get_db)):
+    """新規家事記録を作成（単一または複数）"""
+    # user_id が存在するかチェック
     user = db.query(models.MstUser).filter(models.MstUser.id == kaji.user_id).first()
     if not user:
         raise HTTPException(status_code=400, detail="User not found")
     
-    kaji_master = db.query(models.MstKaji).filter(models.MstKaji.id == kaji.kaji_id).first()
-    if not kaji_master:
-        raise HTTPException(status_code=400, detail="Kaji master not found")
+    created_kajis = []
+    for kaji_id in kaji.kaji_ids:
+        # kaji_id が存在するかチェック
+        kaji_master = db.query(models.MstKaji).filter(models.MstKaji.id == kaji_id).first()
+        if not kaji_master:
+            raise HTTPException(status_code=400, detail=f"Kaji master not found for id {kaji_id}")
+        
+        db_kaji = models.TblKaji(kaji_id=kaji_id, user_id=kaji.user_id, done_date=kaji.done_date)
+        db.add(db_kaji)
+        created_kajis.append(db_kaji)
     
-    db_kaji = models.TblKaji(**kaji.model_dump())
-    db.add(db_kaji)
     db.commit()
-    db.refresh(db_kaji)
-    return db_kaji
+    for kaji in created_kajis:
+        db.refresh(kaji)
+    return created_kajis
 
 #PUT処理
 @router.put("/{kaji_id}", response_model=schemas.TblKaji)

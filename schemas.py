@@ -28,6 +28,12 @@ class TblKajiCreate(TblKajiBase):
     pass
 
 
+class TblKajiCreateMultiple(BaseModel):
+    kaji_ids: list[int]
+    user_id: int
+    done_date: datetime
+
+
 class TblKajiUpdate(BaseModel):
     kaji_id: int = None
     user_id: int = None
